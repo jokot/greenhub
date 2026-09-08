@@ -1,0 +1,1 @@
+# tests/__init__.py (empty — makes tests a package so `import keeper` works from repo root)
