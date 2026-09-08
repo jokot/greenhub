@@ -12,7 +12,7 @@ def _init(tmp):
     git-init without a seed commit would make main() return 1, not 0.
     """
     repo, bare = tmp / "log", tmp / "origin.git"
-    subprocess.run(["git", "init", "-q", "-b", "main", str(bare)], check=True)
+    subprocess.run(["git", "init", "-q", "--bare", "-b", "main", str(bare)], check=True)
     subprocess.run(["git", "init", "-q", "-b", "main", str(repo)], check=True)
     for arg in ("user.name", "user.email"):
         subprocess.run(["git", "config", arg, "x" if "name" in arg else "x@x"],
