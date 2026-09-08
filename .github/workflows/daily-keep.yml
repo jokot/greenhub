@@ -1,0 +1,23 @@
+name: daily-keep
+on:
+  schedule:
+    - cron: "30 23 * * *"   # 06:30 JKT
+    - cron: "30 9 * * *"    # 16:30 JKT
+  workflow_dispatch: {}
+jobs:
+  keep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4            # streak-keeper itself
+      - uses: actions/checkout@v4            # the commit target
+        with:
+          repository: jokot/streak-log
+          token: ${{ secrets.STREAK_PAT }}
+          path: streak-log
+      - run: |
+          git config user.name  "jokot"
+          git config user.email "25982672+jokot@users.noreply.github.com"
+        working-directory: streak-log
+      - run: python keeper.py --repo streak-log
+        env:
+          GH_TOKEN: ${{ secrets.STREAK_PAT }}
