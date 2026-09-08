@@ -14,7 +14,7 @@ def _git(*a, cwd):
 def repo(tmp_path):
     """Real git repo with a bare origin so push succeeds offline."""
     work, bare = tmp_path / "log", tmp_path / "origin.git"
-    subprocess.run(["git", "init", "-q", "-b", "main", str(bare)])
+    subprocess.run(["git", "init", "-q", "--bare", "-b", "main", str(bare)])
     subprocess.run(["git", "init", "-q", "-b", "main", str(work)])
     _git("config", "user.name", AUTHOR_NAME, cwd=work)
     _git("config", "user.email", AUTHOR_EMAIL, cwd=work)
