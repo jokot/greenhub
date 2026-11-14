@@ -4,10 +4,20 @@ on:
     - cron: "30 23 * * *"   # 06:30 JKT
     - cron: "30 9 * * *"    # 16:30 JKT
   workflow_dispatch: {}
+permissions:
+  contents: read
+  actions: write   # needed by the keepalive step
 jobs:
   keep:
     runs-on: ubuntu-latest
     steps:
+      # GitHub disables scheduled workflows after 60 days with no commits to this repo.
+      # The keeper commits to streak-log, not to this repo.
+      # A call to the enable endpoint resets the 60-day timer.
+      - name: Keep workflow enabled
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/daily-keep.yml/enable"
+        env:
+          GH_TOKEN: ${{ github.token }}
       - uses: actions/checkout@v4            # streak-keeper itself
       - uses: actions/checkout@v4            # the commit target
         with:
